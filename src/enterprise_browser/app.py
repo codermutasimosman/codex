@@ -54,7 +54,8 @@ def build_app(config: PolicyConfig | None = None) -> ChromiumPolicyApp:
     config = config or PolicyConfig()
     installer = ChromiumInstaller(cache_dir=config.playwright_cache)
     policy_manager = PolicyManager(
-        policy_path=config.policy_path,
+        registry_hive=config.registry_hive,
+        registry_path=config.registry_path,
         required_policies=dict(config.required_policies),
     )
     launcher = ChromiumLauncher(

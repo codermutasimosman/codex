@@ -35,10 +35,12 @@ Execute the high-level workflow via the module entrypoint:
 python -m enterprise_browser
 ```
 
-On Windows, the application ensures `%LOCALAPPDATA%/Chromium/User Data/Policies/Managed/policy.json` contains the following policies before launching Chromium:
+On Windows, the application writes the required policies to the registry key `HKEY_LOCAL_MACHINE\Software\Policies\Chromium` before launching Chromium:
 
 - `DeveloperToolsAvailability` set to `2` to disable DevTools.
 - `DisableAutoUpdateChecksCheckboxValue` set to `true` to disable update checks.
 - `IncognitoModeAvailability` set to `1` to enforce incognito-only mode.
 
 Chromium starts in headless mode, opens a blank tab, and remains active briefly so the policies can be verified in action.
+
+> **Note:** Writing to `HKEY_LOCAL_MACHINE` requires an elevated command prompt on Windows. Run the utility as an administrator to allow the policy updates to succeed.

@@ -17,19 +17,6 @@ def _local_app_data() -> Path:
     return Path.home() / "AppData" / "Local"
 
 
-def _default_policy_path() -> Path:
-    """Compute the expected Windows Chromium policy location."""
-
-    return (
-        _local_app_data()
-        / "Chromium"
-        / "User Data"
-        / "Policies"
-        / "Managed"
-        / "policy.json"
-    )
-
-
 def _default_playwright_cache() -> Path:
     """Return the standard ms-playwright cache directory on Windows."""
 
@@ -40,7 +27,8 @@ def _default_playwright_cache() -> Path:
 class PolicyConfig:
     """Runtime configuration describing Chromium policies and launch options."""
 
-    policy_path: Path = field(default_factory=_default_policy_path)
+    registry_hive: str = "HKEY_LOCAL_MACHINE"
+    registry_path: str = r"Software\Policies\Chromium"
     required_policies: Dict[str, Any] = field(
         default_factory=lambda: {
             "DeveloperToolsAvailability": 2,
