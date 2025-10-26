@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import logging
-from contextlib import closing
 from typing import Any, Dict, Tuple
 
 
@@ -27,10 +26,14 @@ class PolicyManager:
         hive = self._resolve_hive(module)
         access = module.KEY_READ | module.KEY_WRITE | module.KEY_SET_VALUE
 
+        registry = None
+        key = None
+        updated = False
+
         try:
-            with closing(module.ConnectRegistry(None, hive)) as registry:
-                with closing(module.CreateKeyEx(registry, self._registry_path, 0, access)) as key:
-                    updated = self._apply_required_values(module, key)
+            registry = module.ConnectRegistry(None, hive)
+            key = module.CreateKeyEx(registry, self._registry_path, 0, access)
+            updated = self._apply_required_values(module, key)
         except PermissionError as exc:  # pragma: no cover - depends on OS permissions
             raise RuntimeError(
                 "Administrator privileges are required to configure Chromium policies in the "
@@ -40,6 +43,11 @@ class PolicyManager:
             raise RuntimeError(
                 "Unable to update Chromium policies in the Windows registry."
             ) from exc
+        finally:
+            if key is not None:
+                module.CloseKey(key)
+            if registry is not None:
+                module.CloseKey(registry)
 
         location = f"{self._registry_hive_name}\\{self._registry_path}"
         if updated:
