@@ -23,6 +23,12 @@ def _default_playwright_cache() -> Path:
     return _local_app_data() / "ms-playwright"
 
 
+def _default_profile_dir() -> Path:
+    """Return the bundled profile directory relative to the current working tree."""
+
+    return Path.cwd() / "profiles" / "default"
+
+
 @dataclass(frozen=True)
 class PolicyConfig:
     """Runtime configuration describing Chromium policies and launch options."""
@@ -42,6 +48,7 @@ class PolicyConfig:
     headless: bool = False
     launch_args: Tuple[str, ...] = ("--incognito",)
     stealth_enabled: bool = True
+    profile_dir: Path = field(default_factory=_default_profile_dir)
 
 
 __all__ = ["PolicyConfig"]

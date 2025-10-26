@@ -64,6 +64,7 @@ def build_app(config: PolicyConfig | None = None) -> ChromiumPolicyApp:
         launch_url=config.launch_url,
         timeout_ms=config.launch_timeout_ms,
         enable_stealth=config.stealth_enabled,
+        profile_dir=config.profile_dir,
     )
     return ChromiumPolicyApp(installer, policy_manager, launcher)
 

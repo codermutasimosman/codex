@@ -46,4 +46,6 @@ Chromium starts with a visible window, opens the configured URL, and applies a s
 `patchright` helpers) to soften common automation fingerprints. The process blocks until the browser window is closed manually,
 ensuring the instance is not terminated by the launcher.
 
+All Chromium state is stored in the repository-relative profile directory `profiles/default`, making it easy to ship a preconfigured profile alongside the application when packaging it into an installer.
+
 > **Note:** Writing to `HKEY_LOCAL_MACHINE` requires an elevated command prompt on Windows. Run the utility as an administrator to allow the policy updates to succeed.
