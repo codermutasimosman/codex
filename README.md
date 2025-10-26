@@ -35,7 +35,7 @@ Execute the high-level workflow via the module entrypoint:
 python -m enterprise_browser
 ```
 
-The application ensures `/etc/chromium/policies/managed/policy.json` contains the following policies before launching Chromium:
+On Windows, the application ensures `%LOCALAPPDATA%/Chromium/User Data/Policies/Managed/policy.json` contains the following policies before launching Chromium:
 
 - `DeveloperToolsAvailability` set to `2` to disable DevTools.
 - `DisableAutoUpdateChecksCheckboxValue` set to `true` to disable update checks.
