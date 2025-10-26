@@ -39,8 +39,9 @@ class PolicyConfig:
     playwright_cache: Path = field(default_factory=_default_playwright_cache)
     launch_url: str = "about:blank"
     launch_timeout_ms: int = 3_000
-    headless: bool = True
+    headless: bool = False
     launch_args: Tuple[str, ...] = ("--incognito",)
+    stealth_enabled: bool = True
 
 
 __all__ = ["PolicyConfig"]
