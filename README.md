@@ -40,7 +40,7 @@ On Windows, the application writes the required policies to the registry key `HK
 
 - `DeveloperToolsAvailability` set to `2` to disable DevTools.
 - `DisableAutoUpdateChecksCheckboxValue` set to `true` to disable update checks.
-- `IncognitoModeAvailability` set to `1` to enforce incognito-only mode.
+- `IncognitoModeAvailability` set to `2` to enforce incognito-only mode.
 
 Chromium starts with a visible window, opens the configured URL, and applies a stealth script (provided by the bundled
 `patchright` helpers) to soften common automation fingerprints. The process blocks until the browser window is closed manually,

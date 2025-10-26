@@ -33,7 +33,7 @@ class PolicyConfig:
         default_factory=lambda: {
             "DeveloperToolsAvailability": 2,
             "DisableAutoUpdateChecksCheckboxValue": True,
-            "IncognitoModeAvailability": 1,
+            "IncognitoModeAvailability": 2,
         }
     )
     playwright_cache: Path = field(default_factory=_default_playwright_cache)
