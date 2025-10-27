@@ -5,7 +5,12 @@ import logging
 from pathlib import Path
 from typing import Iterable
 
-from playwright.sync_api import BrowserContext, Playwright
+from playwright.sync_api import (
+    BrowserContext,
+    Page,
+    Playwright,
+    TimeoutError as PlaywrightTimeoutError,
+)
 
 from patchright import apply_stealth_sync
 
@@ -62,14 +67,31 @@ class ChromiumLauncher:
     def _prepare_context(self, context: BrowserContext) -> None:
         if self._enable_stealth:
             apply_stealth_sync(context)
-        pages = context.pages
-        page = pages[0] if pages else context.new_page()
+        page = self._resolve_initial_page(context)
+        if page is None:
+            return
         if self._launch_url:
             page.goto(self._launch_url)
         if self._timeout_ms:
             logging.info("Initial wait %sms before handing over control.", self._timeout_ms)
             page.wait_for_timeout(self._timeout_ms)
         page.bring_to_front()
+
+
+    def _resolve_initial_page(self, context: BrowserContext) -> Page | None:
+        pages = context.pages
+        if pages:
+            return pages[0]
+        try:
+            wait_kwargs = {}
+            if self._timeout_ms:
+                wait_kwargs["timeout"] = self._timeout_ms
+            return context.wait_for_event("page", **wait_kwargs)
+        except PlaywrightTimeoutError:
+            logging.warning("Timed out waiting for the initial page; continuing without navigation.")
+        except Exception:
+            logging.exception("Failed to obtain an initial page from the persistent context.")
+        return None
 
 
 __all__ = ["ChromiumLauncher"]
