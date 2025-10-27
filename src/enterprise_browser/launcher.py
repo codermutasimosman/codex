@@ -53,11 +53,7 @@ class ChromiumLauncher:
             )
             self._prepare_context(context)
             logging.info("Chromium launched successfully; close the window to exit.")
-            browser = context.browser
-            if browser is not None:
-                browser.wait_for_event("disconnected")
-            else:
-                context.wait_for_event("close")
+            context.wait_for_event("close")
         except Exception:
             if context is not None:
                 context.close()
@@ -66,8 +62,10 @@ class ChromiumLauncher:
     def _prepare_context(self, context: BrowserContext) -> None:
         if self._enable_stealth:
             apply_stealth_sync(context)
-        page = context.new_page()
-        page.goto(self._launch_url)
+        pages = context.pages
+        page = pages[0] if pages else context.new_page()
+        if self._launch_url:
+            page.goto(self._launch_url)
         if self._timeout_ms:
             logging.info("Initial wait %sms before handing over control.", self._timeout_ms)
             page.wait_for_timeout(self._timeout_ms)
