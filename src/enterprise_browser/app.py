@@ -68,6 +68,7 @@ def build_app(config: PolicyConfig | None = None) -> ChromiumPolicyApp:
         browser_channel=config.browser_channel,
         no_viewport=config.no_viewport,
         ignore_default_args=config.ignore_default_args,
+        chromium_sandbox=config.chromium_sandbox,
     )
     return ChromiumPolicyApp(installer, policy_manager, launcher)
 

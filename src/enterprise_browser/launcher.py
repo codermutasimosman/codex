@@ -30,6 +30,7 @@ class ChromiumLauncher:
         browser_channel: str,
         no_viewport: bool,
         ignore_default_args: Iterable[str],
+        chromium_sandbox: bool,
     ) -> None:
         self._headless = headless
         self._launch_args = tuple(launch_args)
@@ -40,6 +41,7 @@ class ChromiumLauncher:
         self._browser_channel = browser_channel
         self._no_viewport = no_viewport
         self._ignore_default_args = tuple(ignore_default_args)
+        self._chromium_sandbox = chromium_sandbox
 
     def launch(self, playwright: Playwright) -> None:
         """Launch Chromium and visit the configured URL."""
@@ -55,6 +57,7 @@ class ChromiumLauncher:
                 no_viewport=self._no_viewport,
                 args=list(self._launch_args),
                 ignore_default_args=list(self._ignore_default_args),
+                chromium_sandbox=self._chromium_sandbox,
             )
             self._prepare_context(context)
             logging.info("Chromium launched successfully; close the window to exit.")

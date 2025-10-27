@@ -61,7 +61,9 @@ class PolicyConfig:
         "--disable-default-apps",
         "--disable-extensions",
         "--disable-popup-blocking",
+        "--no-sandbox",
     )
+    chromium_sandbox: bool = True
 
 
 __all__ = ["PolicyConfig"]
