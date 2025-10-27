@@ -24,9 +24,9 @@ def _default_playwright_cache() -> Path:
 
 
 def _default_profile_dir() -> Path:
-    """Return the bundled profile directory relative to the current working tree."""
+    """Return the bundled profile directory located under the repository root."""
 
-    return Path.cwd() / "profiles" / "default"
+    return Path(__file__).resolve().parents[2] / "profiles" / "default"
 
 
 @dataclass(frozen=True)
