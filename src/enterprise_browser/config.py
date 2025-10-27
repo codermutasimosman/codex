@@ -24,9 +24,9 @@ def _default_playwright_cache() -> Path:
 
 
 def _default_profile_dir() -> Path:
-    """Return the bundled profile directory relative to the current working tree."""
+    """Return the bundled profile directory located under the repository root."""
 
-    return Path.cwd() / "profiles" / "default"
+    return Path(__file__).resolve().parents[2] / "profiles" / "default"
 
 
 @dataclass(frozen=True)
@@ -46,9 +46,22 @@ class PolicyConfig:
     launch_url: str = "about:blank"
     launch_timeout_ms: int = 3_000
     headless: bool = False
-    launch_args: Tuple[str, ...] = ("--incognito",)
+    launch_args: Tuple[str, ...] = (
+        "--incognito",
+        "--disable-blink-features=AutomationControlled",
+        "--disable-infobars",
+    )
     stealth_enabled: bool = True
     profile_dir: Path = field(default_factory=_default_profile_dir)
+    browser_channel: str = "chrome"
+    no_viewport: bool = True
+    ignore_default_args: Tuple[str, ...] = (
+        "--enable-automation",
+        "--disable-component-update",
+        "--disable-default-apps",
+        "--disable-extensions",
+        "--disable-popup-blocking",
+    )
 
 
 __all__ = ["PolicyConfig"]

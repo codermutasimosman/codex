@@ -22,6 +22,9 @@ class ChromiumLauncher:
         *,
         enable_stealth: bool,
         profile_dir: Path,
+        browser_channel: str,
+        no_viewport: bool,
+        ignore_default_args: Iterable[str],
     ) -> None:
         self._headless = headless
         self._launch_args = tuple(launch_args)
@@ -29,6 +32,9 @@ class ChromiumLauncher:
         self._timeout_ms = timeout_ms
         self._enable_stealth = enable_stealth
         self._profile_dir = profile_dir
+        self._browser_channel = browser_channel
+        self._no_viewport = no_viewport
+        self._ignore_default_args = tuple(ignore_default_args)
 
     def launch(self, playwright: Playwright) -> None:
         """Launch Chromium and visit the configured URL."""
@@ -39,8 +45,11 @@ class ChromiumLauncher:
         try:
             context = playwright.chromium.launch_persistent_context(
                 str(user_data_dir),
+                channel=self._browser_channel,
                 headless=self._headless,
+                no_viewport=self._no_viewport,
                 args=list(self._launch_args),
+                ignore_default_args=list(self._ignore_default_args),
             )
             self._prepare_context(context)
             logging.info("Chromium launched successfully; close the window to exit.")
